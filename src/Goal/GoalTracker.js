@@ -13,6 +13,8 @@ const GoalTracker = () => {
   const calculateDays = (start, end) => {
     const startDateTime = new Date(start);
     const endDateTime = new Date(end);
+    startDateTime.setHours(0, 0, 0, 0);
+    endDateTime.setHours(0, 0, 0, 0);
     const diffTime = Math.abs(endDateTime - startDateTime);
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
     return diffDays;
@@ -41,6 +43,8 @@ const GoalTracker = () => {
 
     const start = new Date(startDate);
     const end = new Date(endDate);
+    start.setHours(0, 0, 0, 0);
+    end.setHours(0, 0, 0, 0);
 
     if (end < start) {
       alert('End date must be after start date');
@@ -74,6 +78,9 @@ const GoalTracker = () => {
 
       for (let day = 1; day <= daysInMonth; day++) {
         const date = new Date(year, month, day);
+        date.setHours(0, 0, 0, 0);
+        
+        // Check if date is within goal period (inclusive of both start and end)
         if (date >= start && date <= end) {
           monthData.days.push({
             day,
@@ -108,7 +115,7 @@ const GoalTracker = () => {
 
     // Optimized settings for smaller file size
     const captureSettings = {
-      scale: 1.5,  // Reduced from 2 to 1.5 for smaller size
+      scale: 1.5,
       useCORS: true,
       logging: false,
       backgroundColor: '#ffffff',
@@ -121,7 +128,7 @@ const GoalTracker = () => {
     const headerElement = document.getElementById('pdf-header');
     if (headerElement) {
       const headerCanvas = await html2canvas(headerElement, captureSettings);
-      const headerImgData = headerCanvas.toDataURL('image/jpeg', 0.75);  // JPEG with 75% quality
+      const headerImgData = headerCanvas.toDataURL('image/jpeg', 0.75);
       const headerImgHeight = (headerCanvas.height * pdfWidth) / headerCanvas.width;
       pdf.addImage(headerImgData, 'JPEG', 0, 0, pdfWidth, Math.min(headerImgHeight, pdfHeight));
     }
@@ -131,7 +138,7 @@ const GoalTracker = () => {
     for (let i = 0; i < monthElements.length; i++) {
       pdf.addPage();
       const canvas = await html2canvas(monthElements[i], captureSettings);
-      const imgData = canvas.toDataURL('image/jpeg', 0.75);  // JPEG with 75% quality
+      const imgData = canvas.toDataURL('image/jpeg', 0.75);
       const imgHeight = (canvas.height * pdfWidth) / canvas.width;
       pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, Math.min(imgHeight, pdfHeight));
     }
